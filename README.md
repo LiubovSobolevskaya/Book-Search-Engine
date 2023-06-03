@@ -37,8 +37,6 @@ To log out of the site, click on the "Logout" button. This action logs you out a
 ## Requirements
 
 ```
-npm run install
-npm run build
 npm run develop
 ```
 

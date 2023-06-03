@@ -27,10 +27,11 @@ const SavedBooks = () => {
     update(cache, { data: { removeBook } }) {
       try {
         const { savedBooks } = cache.readQuery({ query: GET_ME });
+        const updatedSavedBooks = savedBooks ? [removeBook, ...savedBooks] : [removeBook];
 
         cache.writeQuery({
           query: GET_ME,
-          data: { savedBooks: [removeBook, ...savedBooks] },
+          data: { savedBooks: updatedSavedBooks },
         });
       } catch (e) {
         console.error(e);
@@ -38,9 +39,13 @@ const SavedBooks = () => {
 
       // update me object's cache
       const { me } = cache.readQuery({ query: GET_ME });
+      const updatedMe = {
+        ...me,
+        savedBooks: [...me.savedBooks, removeBook],
+      };
       cache.writeQuery({
         query: GET_ME,
-        data: { me: { ...me, savedBooks: [...me.savedBooks, removeBook] } },
+        data: { me: updatedMe },
       });
     },
   });
@@ -53,11 +58,7 @@ const SavedBooks = () => {
     }
 
     try {
-      // const response = await deleteBook(bookId, token);
 
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
       console.log(bookId);
       const { data } = await removeBook({
         variables: { bookId: bookId }
