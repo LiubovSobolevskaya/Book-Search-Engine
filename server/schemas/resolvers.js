@@ -18,7 +18,6 @@ const resolvers = {
             if (!user) {
                 throw new Error('Something is wrong!');
             }
-            console.log(user);
             const token = signToken(user);
             return { token, user };
         },
@@ -46,7 +45,6 @@ const resolvers = {
                     { $addToSet: { savedBooks: book } },
                     { new: true }
                 );
-                console.log(updatedUser);
                 return updatedUser;
             }
             throw new AuthenticationError('You need to be logged in!');
