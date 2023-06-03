@@ -23,7 +23,27 @@ const SavedBooks = () => {
 
   // navigate to personal profile page if username is yours
 
-  const [removeBook, { error }] = useMutation(REMOVE_BOOK);
+  const [removeBook, { error }] = useMutation(REMOVE_BOOK, {
+    update(cache, { data: { removeBook } }) {
+      try {
+        const { savedBooks } = cache.readQuery({ query: GET_ME });
+
+        cache.writeQuery({
+          query: GET_ME,
+          data: { savedBooks: [removeBook, ...savedBooks] },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+
+      // update me object's cache
+      const { me } = cache.readQuery({ query: GET_ME });
+      cache.writeQuery({
+        query: GET_ME,
+        data: { me: { ...me, savedBooks: [...me.savedBooks, removeBook] } },
+      });
+    },
+  });
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -38,10 +58,12 @@ const SavedBooks = () => {
       // if (!response.ok) {
       //   throw new Error('something went wrong!');
       // }
-
-      const { updatedUser } = await removeBook({
-        variables: { bookId }
+      console.log(bookId);
+      const { data } = await removeBook({
+        variables: { bookId: bookId }
       });
+
+
       // const updatedUser = await response.json();
 
       // upon success, remove book's id from localStorage

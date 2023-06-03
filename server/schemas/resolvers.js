@@ -1,5 +1,4 @@
 const { AuthenticationError } = require('apollo-server-express');
-import { GraphQLError } from 'graphql';
 const { User, Book } = require('../models');
 const { signToken } = require('../utils/auth');
 
@@ -14,11 +13,12 @@ const resolvers = {
     },
 
     Mutation: {
-        addUser: async (parent, { username, email, password }) => {
+        createUser: async (parent, { username, email, password }) => {
             const user = await User.create({ username, email, password });
             if (!user) {
-                throw new GraphQLError('Something is wrong!');
+                throw new Error('Something is wrong!');
             }
+            console.log(user);
             const token = signToken(user);
             return { token, user };
         },
@@ -43,23 +43,22 @@ const resolvers = {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: { savedBooks: body } },
+                    { $addToSet: { savedBooks: book } },
                     { new: true }
                 );
-
+                console.log(updatedUser);
                 return updatedUser;
             }
             throw new AuthenticationError('You need to be logged in!');
         },
 
-        deleteBook: async (parent, { bookId }, context) => {
+        removeBook: async (parent, { bookId }, context) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBooks: bookId } },
+                    { $pull: { savedBooks: { bookId } } },
                     { new: true }
                 );
-
                 return updatedUser;
             }
             throw new AuthenticationError('You need to be logged in!');
