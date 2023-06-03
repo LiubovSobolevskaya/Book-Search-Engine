@@ -2,6 +2,7 @@
 
 16th Assignment of UCB Extension Web Development Bootcamp<br/>
 Please visit the deployed [website](https://luba-deployed-book-search.herokuapp.com/)
+
 ## Description
 
 The Book Search Engine app is designed to help users find and manage their favorite books. Here's a description of the app based on the given acceptance criteria:
@@ -20,7 +21,8 @@ Clicking on the "Save" button for a book adds its information to your account, e
 
 To log out of the site, click on the "Logout" button. This action logs you out and takes you back to the initial menu, featuring the options "Search for Books" and "Login/Signup." Additionally, you'll find the input field to search for books and the submit button, allowing you to continue exploring and managing your book collection.
 
-
+## Appearance
+![]( assets/appearance.gif)
 
 ---
 
@@ -33,6 +35,7 @@ To log out of the site, click on the "Logout" button. This action logs you out a
 - [MongoDB](https://www.mongodb.com/)
 - [Mongoose](https://www.npmjs.com/package/mongoose)
 - [React](https://react.dev/)
+- [GraphQL](https://graphql.org/)
 
 ## Requirements
 
