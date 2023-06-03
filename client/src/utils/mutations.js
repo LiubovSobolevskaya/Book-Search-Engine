@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 
+// GraphQL mutation to log in a user
 export const LOGIN_USER = gql`
   mutation login( $email: String!, $password:String!) {
     login(email: $email, password: $password) {
@@ -11,7 +12,7 @@ export const LOGIN_USER = gql`
     }
   }
 `;
-
+// GraphQL mutation to create a new user
 export const ADD_USER = gql`
   mutation createUser($username: String!, $email: String!, $password:String!) {
     createUser(username: $username, email: $email, password: $password) {
@@ -22,7 +23,7 @@ export const ADD_USER = gql`
         }
     }
   }`;
-
+// GraphQL mutation to save a book to user's account
 export const SAVE_BOOK = gql`
   mutation saveBook($book: BookInput) {
     saveBook(book: $book) {
@@ -40,7 +41,7 @@ export const SAVE_BOOK = gql`
         }
     }
 }`;
-
+// GraphQL mutation to remove a book from user's account
 export const REMOVE_BOOK = gql`
   mutation removeBook($bookId: String!) {
     removeBook(bookId: $bookId) {

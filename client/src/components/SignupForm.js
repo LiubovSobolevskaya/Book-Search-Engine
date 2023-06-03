@@ -14,9 +14,13 @@ const SignupForm = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    // Update the corresponding field in userFormData state
     setUserFormData({ ...userFormData, [name]: value });
   };
+
+  // Use the ADD_USER mutation and handle its response
   const [createUser, { error, data }] = useMutation(ADD_USER);
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -28,17 +32,19 @@ const SignupForm = () => {
     }
 
     try {
+      // Execute the createUser mutation with the form data
       const { data } = await createUser({
         variables: { username: userFormData.username, email: userFormData.email, password: userFormData.password },
       });
 
+      // Log in the user by storing the token in local storage
       Auth.login(data.createUser.token);
-
     } catch (err) {
       console.error(err);
       setShowAlert(true);
     }
 
+    // Reset the form state
     setUserFormData({
       username: '',
       email: '',
@@ -93,6 +99,7 @@ const SignupForm = () => {
           />
           <Form.Control.Feedback type='invalid'>Password is required!</Form.Control.Feedback>
         </Form.Group>
+
         <Button
           disabled={!(userFormData.username && userFormData.email && userFormData.password)}
           type='submit'

@@ -2,38 +2,25 @@ import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { REMOVE_BOOK } from '../utils/mutations';
 import { GET_ME } from '../utils/queries';
-
-import {
-  Container,
-  Card,
-  Button,
-  Row,
-  Col
-} from 'react-bootstrap';
-
-
+import { Container, Card, Button, Row, Col } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
-
 const SavedBooks = () => {
-
-
-
   const { loading, data } = useQuery(GET_ME);
   const userData = data?.me || data?.user || {};
 
-  // navigate to personal profile page if username is yours
-
   const [removeBook, { error }] = useMutation(REMOVE_BOOK, {
+    // Define the update function to update the cache after removing a book
     update(cache, { data: { removeBook } }) {
       try {
+        // Read the current data from the cache using the GET_ME query
         const { me } = cache.readQuery({ query: GET_ME });
-        //const updatedSavedBooks = savedBooks ? [removeBook, ...savedBooks] : [removeBook];
-        const updatedSavedBooks = me.savedBooks.filter(
-          (book) => book.bookId !== removeBook.bookId
-        );
 
+        // Filter out the removed book from the savedBooks array
+        const updatedSavedBooks = me.savedBooks.filter((book) => book.bookId !== removeBook.bookId);
+
+        // Write the updated data back to the cache
         cache.writeQuery({
           query: GET_ME,
           data: { me: { ...me, savedBooks: updatedSavedBooks } },
@@ -43,7 +30,9 @@ const SavedBooks = () => {
       }
     },
   });
-  // create function that accepts the book's mongo _id value as param and deletes the book from the database
+
+
+  // create function that accepts the book's _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -52,13 +41,9 @@ const SavedBooks = () => {
     }
 
     try {
-
       const { data } = await removeBook({
-        variables: { bookId: bookId }
+        variables: { bookId: bookId },
       });
-
-
-      // const updatedUser = await response.json();
 
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
@@ -82,7 +67,8 @@ const SavedBooks = () => {
       <Container>
         <h2 className='pt-5'>
           {userData.savedBooks?.length
-            ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
+            ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'
+            }:`
             : 'You have no saved books!'}
         </h2>
         <Row>

@@ -1,6 +1,6 @@
 # Book Search Engine
 
-16th Assignment of UCB Extension Web Development Bootcamp
+16th Assignment of UCB Extension Web Development Bootcamp<br/>
 Please visit the deployed [website](https://luba-deployed-book-search.herokuapp.com/)
 ## Description
 
